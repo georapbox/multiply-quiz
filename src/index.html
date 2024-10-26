@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiply Quiz</title>
+  <meta name="description" content="A simple quiz to test your multiplication skills.">
+  <link rel="shortcut icon" href="assets/app-icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/app-icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#21252a">
+  <script src="js/register-service-worker.js" type="module"></script>
+  <script src="js/index.js" type="module"></script>
+</head>
+<body>
+  <noscript>
+    <div class="alert alert-danger text-center" role="alert">
+      This app requires JavaScript to be enabled.
+    </div>
+  </noscript>
+
+  <main>
+    <form id="quizTypeForm">
+      <h1>Choose a quiz type</h1>
+
+      <div style="display: flex; gap: 1rem;">
+        <div>
+          <input type="radio" name="quizType" id="random" value="random" checked>
+          <label for="random">Random</label>
+        </div>
+
+        <div>
+          <input type="radio" name="quizType" id="sequential" value="sequential">
+          <label for="sequential">Sequential</label>
+        </div>
+      </div>
+
+      <button type="submit">Start Quiz</button>
+    </form>
+  </main>
+</body>
+</html>
