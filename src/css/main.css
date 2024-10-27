@@ -1,5 +1,42 @@
 :root {
+  /* Colors */
+  --accent: #0d66fd;
+  --body-color: #363636;
+  --body-bg-color: #ffffff;
+  --btn-bg-color: #363636;
+  --btn-color: #ffffff;
+  --input-bg-color: #ffffff;
+  --outline-color: var(--accent);
+  --border-color: #ced4da;
+  --text-error: #dc3545;
+  --text-success: #198754;
+
+  /* Typography */
+  --font-family: "Roboto", Arial, Helvetica, sans-serif;
+
+  /* Other */
+  --border-radius: 0.25rem;
+
   color-scheme: light dark;
+  accent-color: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Colors */
+    --accent: #75c3ff;
+    --body-color: #eeeeee;
+    --body-bg-color: #212529;
+    --btn-bg-color: #dbdbdb;
+    --btn-color: #212529;
+    --input-bg-color: #343a40;
+    --outline-color: var(--accent);
+    --border-color: #495057;
+    --text-error: #ea868f;
+    --text-success: #75b798;
+
+    accent-color: var(--accent);
+  }
 }
 
 *,
@@ -19,8 +56,36 @@ html, body {
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family);
   text-align: center;
+  background-color: var(--body-bg-color);
+  color: var(--body-color);
+}
+
+button:focus-visible,
+input[type="radio"]:focus-visible {
+  outline-color: var(--outline-color);
+}
+
+button {
+  background-color: var(--btn-bg-color);
+  color: var(--body-bg-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: calc(1.425rem + 2.1vw);
+}
+
+@media (min-width: 1200px) {
+  h1 {
+    font-size: 4rem;
+  }
 }
 
 main {

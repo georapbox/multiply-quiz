@@ -17,7 +17,6 @@ const styles = /* css */ `
 
   :host {
     display: block;
-    /* min-width: 18.75rem; */
     margin: 0 auto;
     padding: 1rem;
   }
@@ -34,8 +33,27 @@ const styles = /* css */ `
 
   #answerInput {
     width: 100%;
+    max-width: 6.25rem;
     text-align: center;
     font-size: 2.55rem;
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+  }
+
+  @media (min-width: 1200px) {
+    #question {
+      font-size: 5rem;
+    }
+
+    #answerInput {
+      font-size: 4rem;
+      max-width: 9.25rem;
+    }
+  }
+
+  #answerInput:focus-visible {
+    outline-color: var(--outline-color);
   }
 
   #score {
@@ -48,14 +66,27 @@ const styles = /* css */ `
 
   #feedback {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1rem;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
     margin-block-start: 1rem;
+    text-align: center;
+    font-size: 1.25rem;
   }
 
   #feedback:empty {
     display: none;
+  }
+
+  #questionsCount {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    font-size: 1rem;
   }
 `;
 
@@ -74,6 +105,7 @@ template.innerHTML = /* html */ `
   </div>
 
   <div id="feedback"></div>
+  <div id="questionsCount"></div>
 `;
 
 class MultiplyQuiz extends HTMLElement {
@@ -82,6 +114,7 @@ class MultiplyQuiz extends HTMLElement {
   #answerInput = null;
   #feedbackEl = null;
   #scoreEl = null;
+  #questionsCountEl = null;
 
   constructor() {
     super();
@@ -94,6 +127,7 @@ class MultiplyQuiz extends HTMLElement {
     this.correctAnswers = 0;
     this.totalQuestions = 0;
     this.questions = this.#generateQuestions();
+    this.answeredQuestions = 0;
   }
 
   get type() {
@@ -112,6 +146,7 @@ class MultiplyQuiz extends HTMLElement {
     this.#answerInput = this.shadowRoot.getElementById('answerInput');
     this.#feedbackEl = this.shadowRoot.getElementById('feedback');
     this.#scoreEl = this.shadowRoot.getElementById('score');
+    this.#questionsCountEl = this.shadowRoot.getElementById('questionsCount');
 
     this.#answerInput.focus();
 
@@ -146,6 +181,9 @@ class MultiplyQuiz extends HTMLElement {
     } else {
       this.#nextRandomQuestion();
     }
+
+    this.#updateScore();
+    this.#updateQuestionsCount();
   }
 
   #nextSequentialQuestion() {
@@ -179,29 +217,45 @@ class MultiplyQuiz extends HTMLElement {
   #checkAnswer() {
     const userAnswer = parseInt(this.#answerInput.value, 10);
     const { num1, num2 } = this.questions[this.currentIndex];
+    const correctAnswer = num1 * num2;
+    let timeout = 1000;
 
-    if (num1 * num2 === userAnswer) {
-      this.#feedbackEl.textContent = 'Correct!';
+    if (userAnswer === correctAnswer) {
+      this.#feedbackEl.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--text-success)" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg> Correct!
+      `;
       this.correctAnswers++;
     } else {
-      this.#feedbackEl.textContent = `Incorrect. The answer is ${num1 * num2}.`;
+      this.#feedbackEl.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--text-error)" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+        </svg> Incorrect! The answer is ${correctAnswer}.
+      `;
+      timeout = 2000;
     }
 
     this.#updateScore();
-    this.#answerInput.disabled = true;
+    this.#answerInput.style.pointerEvents = 'none';
 
     setTimeout(() => {
       this.#answerInput.value = '';
-      this.#answerInput.disabled = false;
+      this.#answerInput.style.pointerEvents = 'auto';
       this.#answerInput.focus();
       this.#feedbackEl.textContent = '';
       this.nextQuestion();
-    }, 1000);
+    }, timeout);
   }
 
   #updateScore() {
     const correctRate = ((this.correctAnswers / this.totalQuestions) * 100).toFixed(2);
     this.#scoreEl.textContent = `Score: ${this.correctAnswers} / ${this.totalQuestions} (${correctRate}%)`;
+  }
+
+  #updateQuestionsCount() {
+    this.answeredQuestions += 1;
+    this.#questionsCountEl.textContent = `Questions: ${this.answeredQuestions} / ${this.totalQuestions}`;
   }
 
   #showCompletionMessage() {
@@ -212,11 +266,13 @@ class MultiplyQuiz extends HTMLElement {
 
   #generateQuestions() {
     const questions = [];
+
     for (let num1 = 1; num1 <= 10; num1++) {
       for (let num2 = 1; num2 <= 10; num2++) {
-        questions.push({ num1, num2 });
+        questions.push({ num1, num2, solution: num1 * num2 });
       }
     }
+
     return questions;
   }
 
