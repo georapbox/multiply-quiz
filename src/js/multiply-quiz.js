@@ -1,3 +1,5 @@
+import celebrationIcon from '../assets/celebration.png';
+
 const styles = /* css */ `
   :host {
     box-sizing: border-box;
@@ -16,40 +18,37 @@ const styles = /* css */ `
   }
 
   :host {
-    display: block;
-    margin: 0 auto;
-    padding: 1rem;
+    display: grid;
+    grid-template-areas: "header" "content" "footer";
+    grid-template-rows: 3rem 1fr 3rem;
+    width: 100%;
+    height: 100%;
   }
 
   #quiz {
+    grid-area: content;
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 0.75rem;
+    padding: 1rem;
   }
 
   #question {
     font-size: 3rem;
+    font-weight: bold;
   }
 
   #answerInput {
-    width: 100%;
-    max-width: 6.25rem;
-    text-align: center;
-    font-size: 2.55rem;
-    background-color: var(--input-bg-color);
+    max-width: 8rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-  }
-
-  @media (min-width: 1200px) {
-    #question {
-      font-size: 5rem;
-    }
-
-    #answerInput {
-      font-size: 4rem;
-      max-width: 9.25rem;
-    }
+    background-color: var(--input-bg-color);
+    font-family: inherit;
+    font-size: 2.55rem;
+    font-weight: bold;
+    color: inherit;
+    text-align: center;
   }
 
   #answerInput:focus-visible {
@@ -57,16 +56,17 @@ const styles = /* css */ `
   }
 
   #score {
+    grid-area: header;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 1rem;
-    position: absolute;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   #feedback {
     position: absolute;
     left: 0;
+    top: calc(50% + 2.5rem);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,19 +74,64 @@ const styles = /* css */ `
     width: 100%;
     margin-block-start: 1rem;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 
   #feedback:empty {
     display: none;
   }
 
-  #questionsCount {
-    position: absolute;
-    left: 50%;
-    bottom: 1rem;
-    transform: translateX(-50%);
+  .progress-container {
+    grid-area: footer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  progress {
+    width: calc(80% - 1rem);
+    max-width: 14rem;
+  }
+
+  .completion-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: calc(1.425rem + 1vw);
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .completion-message img {
+    border-radius: 50%;
+    border: 5px solid var(--border-color);
+  }
+
+  button:focus-visible {
+    outline-color: var(--outline-color);
+  }
+
+  button {
+    background-color: var(--btn-bg-color);
+    color: var(--body-bg-color);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.25rem;
+    font-family: inherit;
     font-size: 1rem;
+    cursor: pointer;
+  }
+
+  @media (min-width: 1024px) {
+    #question {
+      font-size: 4rem;
+    }
+
+    #answerInput {
+      font-size: 3.55rem;
+    }
   }
 `;
 
@@ -98,23 +143,27 @@ template.innerHTML = /* html */ `
   <div id="score"></div>
 
   <div id="quiz">
-    <div id="question">Loading...</div>
     <form id="answerForm">
+      <label for="answerInput" id="question">Loading...</label>
       <input type="number" id="answerInput" required min="0" max="100">
     </form>
+
+    <div id="feedback"></div>
   </div>
 
-  <div id="feedback"></div>
-  <div id="questionsCount"></div>
+  <div class="progress-container">
+    <progress id="progress"></progress>
+  </div>
 `;
 
 class MultiplyQuiz extends HTMLElement {
+  #timeout = null;
   #answerForm = null;
   #questionEl = null;
   #answerInput = null;
   #feedbackEl = null;
   #scoreEl = null;
-  #questionsCountEl = null;
+  #progressEl = null;
 
   constructor() {
     super();
@@ -146,7 +195,7 @@ class MultiplyQuiz extends HTMLElement {
     this.#answerInput = this.shadowRoot.getElementById('answerInput');
     this.#feedbackEl = this.shadowRoot.getElementById('feedback');
     this.#scoreEl = this.shadowRoot.getElementById('score');
-    this.#questionsCountEl = this.shadowRoot.getElementById('questionsCount');
+    this.#progressEl = this.shadowRoot.getElementById('progress');
 
     this.#answerInput.focus();
 
@@ -158,24 +207,45 @@ class MultiplyQuiz extends HTMLElement {
       this.usedQuestions = new Set();
     }
 
-    this.init();
+    this.#init();
   }
 
   disconnectedCallback() {
     this.#answerForm.removeEventListener('submit', this.#handleFormSubmit);
   }
 
-  init() {
+  #init() {
     this.totalQuestions = this.questions.length;
-    this.nextQuestion();
+    this.#nextQuestion();
   }
 
   #handleFormSubmit = evt => {
     evt.preventDefault();
+
+    if (this.#timeout) {
+      return;
+    }
+
     this.#checkAnswer();
   };
 
-  nextQuestion() {
+  #handleRestartQuiz = () => {
+    this.dispatchEvent(new Event('quiz-restart', { bubbles: true, composed: true }));
+  };
+
+  #generateQuestions() {
+    const questions = [];
+
+    for (let num1 = 1; num1 <= 10; num1++) {
+      for (let num2 = 1; num2 <= 10; num2++) {
+        questions.push({ num1, num2, solution: num1 * num2 });
+      }
+    }
+
+    return questions;
+  }
+
+  #nextQuestion() {
     if (this.type === 'sequential') {
       this.#nextSequentialQuestion();
     } else {
@@ -183,7 +253,7 @@ class MultiplyQuiz extends HTMLElement {
     }
 
     this.#updateScore();
-    this.#updateQuestionsCount();
+    this.#updateProgress();
   }
 
   #nextSequentialQuestion() {
@@ -222,14 +292,14 @@ class MultiplyQuiz extends HTMLElement {
 
     if (userAnswer === correctAnswer) {
       this.#feedbackEl.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--text-success)" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--success-color)" viewBox="0 0 16 16" aria-hidden="true">
         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
         </svg> Correct!
       `;
       this.correctAnswers++;
     } else {
       this.#feedbackEl.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--text-error)" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--error-color)" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
         </svg> Incorrect! The answer is ${correctAnswer}.
       `;
@@ -239,49 +309,47 @@ class MultiplyQuiz extends HTMLElement {
     this.#updateScore();
     this.#answerInput.style.pointerEvents = 'none';
 
-    setTimeout(() => {
+    this.#timeout = setTimeout(() => {
       this.#answerInput.value = '';
       this.#answerInput.style.pointerEvents = 'auto';
       this.#answerInput.focus();
       this.#feedbackEl.textContent = '';
-      this.nextQuestion();
+      this.#nextQuestion();
+      this.#timeout = null;
     }, timeout);
   }
 
   #updateScore() {
-    const correctRate = ((this.correctAnswers / this.totalQuestions) * 100).toFixed(2);
-    this.#scoreEl.textContent = `Score: ${this.correctAnswers} / ${this.totalQuestions} (${correctRate}%)`;
+    const correctRate = ((this.correctAnswers / this.answeredQuestions) * 100 || 0).toFixed(0);
+    this.#scoreEl.textContent = `Score: ${this.correctAnswers} / ${this.answeredQuestions} (${correctRate}%)`;
   }
 
-  #updateQuestionsCount() {
+  #updateProgress() {
     this.answeredQuestions += 1;
-    this.#questionsCountEl.textContent = `Questions: ${this.answeredQuestions} / ${this.totalQuestions}`;
+    this.#progressEl.value = this.answeredQuestions / this.totalQuestions;
   }
 
   #showCompletionMessage() {
-    this.#questionEl.textContent = "Congratulations! You've completed all questions.";
+    this.#questionEl.innerHTML = /* html */ `
+      <div class="completion-message">
+        <img src="${celebrationIcon}" alt="Celebration" width="125" height="121" aria-hidden="true">
+        Congratulations! You've completed all questions.
+        <br>
+        Your final score is ${this.correctAnswers} / ${this.totalQuestions}.
+        <div>
+          <button id="restartQuiz">Start Over</button>
+        </div>
+      </div>
+    `;
+    this.#scoreEl.hidden = true;
     this.#answerForm.hidden = true;
+    this.#progressEl.hidden = true;
     this.#updateScore();
+
+    const restartBtn = this.shadowRoot.getElementById('restartQuiz');
+    restartBtn?.addEventListener('click', this.#handleRestartQuiz, { once: true });
   }
 
-  #generateQuestions() {
-    const questions = [];
-
-    for (let num1 = 1; num1 <= 10; num1++) {
-      for (let num2 = 1; num2 <= 10; num2++) {
-        questions.push({ num1, num2, solution: num1 * num2 });
-      }
-    }
-
-    return questions;
-  }
-
-  /**
-   * https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
-   * This is to safe guard against cases where, for instance, a framework may have added the element to the page and set a
-   * value on one of its properties, but lazy loaded its definition. Without this guard, the upgraded element would miss that
-   * property and the instance property would prevent the class property setter from ever being called.
-   */
   #upgradeProperty(prop) {
     const instance = this;
     if (Object.prototype.hasOwnProperty.call(instance, prop)) {

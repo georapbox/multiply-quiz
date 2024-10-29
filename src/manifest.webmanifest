@@ -3,8 +3,8 @@
   "name": "Multiply Quiz",
   "description": "A simple quiz to test your multiplication skills.",
   "start_url": ".",
-  "theme_color": "#21252a",
-  "background_color": "#2b3036",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "any",
   "icons": [

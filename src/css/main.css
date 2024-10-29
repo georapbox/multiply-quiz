@@ -8,8 +8,8 @@
   --input-bg-color: #ffffff;
   --outline-color: var(--accent);
   --border-color: #ced4da;
-  --text-error: #dc3545;
-  --text-success: #198754;
+  --error-color: #dc3545;
+  --success-color: #198754;
 
   /* Typography */
   --font-family: "Roboto", Arial, Helvetica, sans-serif;
@@ -32,11 +32,18 @@
     --input-bg-color: #343a40;
     --outline-color: var(--accent);
     --border-color: #495057;
-    --text-error: #ea868f;
-    --text-success: #75b798;
+    --error-color: #ea868f;
+    --success-color: #75b798;
 
     accent-color: var(--accent);
   }
+}
+
+.noscript {
+  padding: 1rem 2rem;
+  background-color: var(--error-color);
+  border-radius: var(--border-radius);
+  color: var(--body-bg-color);
 }
 
 *,
@@ -55,50 +62,18 @@ html, body {
   height: 100%;
 }
 
+:not(:defined) {
+  display: none !important;
+}
+
 body {
   font-family: var(--font-family);
   text-align: center;
   background-color: var(--body-bg-color);
   color: var(--body-color);
-}
-
-button:focus-visible,
-input[type="radio"]:focus-visible {
-  outline-color: var(--outline-color);
-}
-
-button {
-  background-color: var(--btn-bg-color);
-  color: var(--body-bg-color);
-  border: none;
-  border-radius: var(--border-radius);
-  padding: 0.5rem 1rem;
-  font-family: inherit;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-h1 {
-  font-size: calc(1.425rem + 2.1vw);
-}
-
-@media (min-width: 1200px) {
-  h1 {
-    font-size: 4rem;
-  }
+  overflow-x: hidden;
 }
 
 main {
-  display: flex;
   height: 100%;
-  justify-content: safe center;
-  align-items: safe center;
-}
-
-#quizTypeForm {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
 }
