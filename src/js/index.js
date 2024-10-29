@@ -7,7 +7,8 @@ const mainEl = document.querySelector('main');
 document.addEventListener('quiz-start', evt => {
   const QuizIntroEl = document.querySelector('quiz-intro');
   const quizEl = document.createElement('multiply-quiz');
-  quizEl?.setAttribute('type', evt.detail.quizType);
+  evt.detail.sequential && quizEl?.setAttribute('sequential', '');
+  evt.detail.multipleChoice && quizEl?.setAttribute('multiple-choice', '');
   mainEl?.appendChild(quizEl);
   QuizIntroEl?.remove();
 });

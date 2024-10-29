@@ -76,13 +76,13 @@ template.innerHTML = /* html */ `
 
     <div>
       <div>
-        <input type="radio" name="quizType" id="random" value="random" checked>
-        <label for="random">Random</label>
+        <input type="checkbox" name="sequential" id="sequential">
+        <label for="sequential">Sequential</label>
       </div>
 
       <div>
-        <input type="radio" name="quizType" id="sequential" value="sequential">
-        <label for="sequential">Sequential</label>
+        <input type="checkbox" name="multiple-choice" id="multiple-choice">
+        <label for="multiple-choice">Multiple Choice</label>
       </div>
     </div>
 
@@ -114,13 +114,14 @@ class QuizIntro extends HTMLElement {
   #handleFormSubmit = evt => {
     evt.preventDefault();
 
-    const quizType = evt.target['quizType'].value;
-
     this.dispatchEvent(
       new CustomEvent('quiz-start', {
         bubbles: true,
         composed: true,
-        detail: { quizType }
+        detail: {
+          sequential: evt.target['sequential'].checked,
+          multipleChoice: evt.target['multiple-choice'].checked
+        }
       })
     );
   };
