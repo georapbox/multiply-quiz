@@ -1,6 +1,6 @@
 import '../css/main.css';
-import { QuizIntro } from './quiz-intro.js';
-import { MultiplyQuiz } from './multiply-quiz.js';
+import { QuizIntro } from './components/quiz-intro.js';
+import { MultiplyQuiz } from './components/multiply-quiz.js';
 
 const mainEl = document.querySelector('main');
 

@@ -1,7 +1,11 @@
-import logoIcon from '../assets/app-icons/android-chrome-192x192.png';
+import logoLightIcon from '../../assets/logo-light.png';
+import logoDarkIcon from '../../assets/logo-dark.png';
 
 const styles = /* css */ `
   :host {
+    display: grid;
+    place-items: center;
+    height: 100%;
     box-sizing: border-box;
   }
 
@@ -15,12 +19,6 @@ const styles = /* css */ `
   [hidden],
   ::slotted([hidden]) {
     display: none !important;
-  }
-
-  :host {
-    display: grid;
-    place-items: center;
-    height: 100%;
   }
 
   button:focus-visible,
@@ -57,11 +55,6 @@ const styles = /* css */ `
     display: flex;
     gap: 1rem;
   }
-
-  form > img {
-    border-radius: 50%;
-    border: 5px solid var(--border-color);
-  }
 `;
 
 const template = document.createElement('template');
@@ -70,7 +63,11 @@ template.innerHTML = /* html */ `
   <style>${styles}</style>
 
   <form>
-    <img src="${logoIcon}" alt="Quiz" width="125" height="125" aria-hidden="true">
+    <picture>
+      <source srcset="${logoLightIcon}" media="(prefers-color-scheme: dark)">
+      <source srcset="${logoDarkIcon}" media="(prefers-color-scheme: light)">
+      <img src="${logoDarkIcon}" alt="Quiz" width="120" height="120" aria-hidden="true">
+    </picture>
 
     <h1>Choose a quiz type</h1>
 

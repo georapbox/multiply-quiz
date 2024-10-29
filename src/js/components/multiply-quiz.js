@@ -1,9 +1,15 @@
-import celebrationIcon from '../assets/celebration.png';
+import celebrationIcon from '../../assets/celebration.png';
+import { shuffle } from '../utils/shuffle.js';
 
 const NUM_OF_MULTIPLE_CHOICES = 3;
 
 const styles = /* css */ `
   :host {
+    display: grid;
+    grid-template-areas: "header" "content";
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 100%;
     box-sizing: border-box;
   }
 
@@ -17,14 +23,6 @@ const styles = /* css */ `
   [hidden],
   ::slotted([hidden]) {
     display: none !important;
-  }
-
-  :host {
-    display: grid;
-    grid-template-areas: "header" "content";
-    grid-template-rows: minmax(4rem, auto) 1fr;
-    width: 100%;
-    height: 100%;
   }
 
   #quiz {
@@ -69,14 +67,15 @@ const styles = /* css */ `
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
+    padding-block: 1rem;
     font-size: 1rem;
   }
 
   #feedback {
     position: absolute;
     left: 0;
-    top: calc(50% + 4.5rem);
+    top: calc(50% + 5rem);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,7 +87,7 @@ const styles = /* css */ `
   }
 
   #feedback:empty {
-    display: none;
+    display: none !important;
   }
 
   .completion-message {
@@ -104,7 +103,7 @@ const styles = /* css */ `
 
   .completion-message img {
     border-radius: 50%;
-    border: 5px solid var(--border-color);
+    border: 5px solid var(--body-color);
   }
 
   button:focus-visible {
@@ -122,9 +121,14 @@ const styles = /* css */ `
     cursor: pointer;
   }
 
+  #multipleChoice:empty,
+  :host(:not([multiple-choice])) #multipleChoice {
+    display: none !important;
+  }
+
   #multipleChoice {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
     justify-content: center;
     margin-block-start: 1rem;
@@ -143,13 +147,13 @@ const styles = /* css */ `
 
   #multipleChoice > button.correct {
     background-color: var(--success-color);
-    border-color: var(--success-color);
+    border-color: color-mix(in srgb, var(--success-color) 40%, #ffffff);
     color: var(--body-bg-color);
   }
 
   #multipleChoice > button.incorrect {
     background-color: var(--error-color);
-    border-color: var(--error-color);
+    border-color: color-mix(in srgb, var(--error-color) 40%, #ffffff);
     color: var(--body-bg-color);
   }
 
@@ -180,7 +184,7 @@ template.innerHTML = /* html */ `
       <input type="number" id="answerInput" required min="0" max="100">
     </form>
 
-    <div id="multipleChoice" hidden></div>
+    <div id="multipleChoice"></div>
 
     <div id="feedback"></div>
   </div>
@@ -193,7 +197,7 @@ class MultiplyQuiz extends HTMLElement {
   #answeredQuestions = 0;
   #currentIndex = -1;
   #usedQuestions = new Set();
-  #answerTimeout = null;
+  #feedbackTimeout = null;
   #answerForm = null;
   #questionEl = null;
   #answerInput = null;
@@ -245,8 +249,8 @@ class MultiplyQuiz extends HTMLElement {
     this.#init();
 
     if (this.multipleChoice) {
-      this.shadowRoot.getElementById('multipleChoice').hidden = false;
       this.#answerInput.setAttribute('disabled', '');
+      this.#answerInput.setAttribute('type', 'text');
     } else {
       this.#answerInput.focus();
     }
@@ -266,7 +270,7 @@ class MultiplyQuiz extends HTMLElement {
   #handleFormSubmit = evt => {
     evt.preventDefault();
 
-    if (this.#answerTimeout) {
+    if (this.#feedbackTimeout) {
       return;
     }
 
@@ -276,7 +280,7 @@ class MultiplyQuiz extends HTMLElement {
   #handleMultipleChoiceSelect = evt => {
     const btn = evt.target.closest('button');
 
-    if (this.#answerTimeout || !btn) {
+    if (this.#feedbackTimeout || !btn) {
       return;
     }
 
@@ -291,29 +295,28 @@ class MultiplyQuiz extends HTMLElement {
   #generateQuestions() {
     const questions = [];
 
-    for (let num1 = 1; num1 <= 10; num1 += 1) {
-      for (let num2 = 1; num2 <= 10; num2 += 1) {
-        const solution = num1 * num2;
-
-        questions.push({ num1, num2, solution });
+    for (let factor1 = 1; factor1 <= 10; factor1 += 1) {
+      for (let factor2 = 1; factor2 <= 10; factor2 += 1) {
+        const product = factor1 * factor2;
+        questions.push({ factor1, factor2, product });
       }
     }
 
     if (this.multipleChoice) {
-      questions.forEach(q => {
-        q.answers = [q.solution];
+      questions.forEach(question => {
+        question.answerChoices = [question.product];
 
-        while (q.answers.length < NUM_OF_MULTIPLE_CHOICES) {
-          const randomAnswer = questions[Math.floor(Math.random() * questions.length)].solution;
+        while (question.answerChoices.length < NUM_OF_MULTIPLE_CHOICES) {
+          const randomAnswer = questions[Math.floor(Math.random() * questions.length)].product;
 
-          if (q.answers.includes(randomAnswer)) {
+          if (question.answerChoices.includes(randomAnswer)) {
             continue;
           }
 
-          q.answers.push(randomAnswer);
+          question.answerChoices.push(randomAnswer);
         }
 
-        q.answers = q.answers.sort(() => Math.random() - 0.5);
+        question.answerChoices = shuffle(question.answerChoices);
       });
     }
 
@@ -330,12 +333,12 @@ class MultiplyQuiz extends HTMLElement {
     this.#currentIndex += 1;
 
     if (this.#currentIndex < this.#totalQuestions) {
-      const { num1, num2 } = this.#questions[this.#currentIndex];
-      this.#questionEl.textContent = `${num1} x ${num2} =`;
+      const { factor1, factor2 } = this.#questions[this.#currentIndex];
+      this.#questionEl.textContent = `${factor1} x ${factor2} =`;
 
       if (this.multipleChoice) {
         const question = this.#questions[this.#currentIndex];
-        this.#updateMultipleChoice(question.answers);
+        this.#updateMultipleChoice(question.answerChoices);
       }
     } else {
       this.#showCompletionMessage();
@@ -353,20 +356,20 @@ class MultiplyQuiz extends HTMLElement {
     do {
       this.#currentIndex = Math.floor(Math.random() * this.#totalQuestions);
       question = this.#questions[this.#currentIndex];
-    } while (this.#usedQuestions.has(`${question.num1}-${question.num2}`));
+    } while (this.#usedQuestions.has(`${question.factor1}-${question.factor2}`));
 
-    this.#usedQuestions.add(`${question.num1}-${question.num2}`);
-    this.#questionEl.textContent = `${question.num1} x ${question.num2} =`;
+    this.#usedQuestions.add(`${question.factor1}-${question.factor2}`);
+    this.#questionEl.textContent = `${question.factor1} x ${question.factor2} =`;
 
     if (this.multipleChoice) {
-      this.#updateMultipleChoice(question.answers);
+      this.#updateMultipleChoice(question.answerChoices);
     }
   }
 
-  #updateMultipleChoice(answers) {
+  #updateMultipleChoice(answerChoices) {
     this.#multipleChoiceEl.replaceChildren();
 
-    answers.forEach(answer => {
+    answerChoices.forEach(answer => {
       const btn = document.createElement('button');
       btn.setAttribute('data-answer', answer);
       btn.type = 'button';
@@ -377,7 +380,7 @@ class MultiplyQuiz extends HTMLElement {
 
   #checkAnswer() {
     const userAnswer = parseInt(this.#answerInput.value, 10);
-    const correctAnswer = this.#questions[this.#currentIndex].solution;
+    const correctAnswer = this.#questions[this.#currentIndex].product;
     let timeout = 1000;
 
     if (this.multipleChoice) {
@@ -392,6 +395,7 @@ class MultiplyQuiz extends HTMLElement {
         const incorrectBtn = this.#multipleChoiceEl.querySelector(`button[data-answer="${userAnswer}"]`);
         correctBtn.classList.add('correct');
         incorrectBtn.classList.add('incorrect');
+        timeout = 2000;
       }
     } else {
       this.#answerInput.style.pointerEvents = 'none';
@@ -417,11 +421,11 @@ class MultiplyQuiz extends HTMLElement {
 
     this.#updateScore();
 
-    this.#answerTimeout = setTimeout(() => {
+    this.#feedbackTimeout = setTimeout(() => {
       this.#answerInput.value = '';
       this.#answerInput.focus();
       this.#nextQuestion();
-      this.#answerTimeout = null;
+      this.#feedbackTimeout = null;
 
       if (this.multipleChoice) {
         this.#multipleChoiceEl.removeAttribute('inert');
