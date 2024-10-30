@@ -3,13 +3,9 @@
   --accent: #0d66fd;
   --body-color: #191c1e;
   --body-bg-color: #ffffff;
-  --btn-bg-color: #191c1e;
-  --btn-color: #ffffff;
-  --input-bg-color: #ffffff;
-  --outline-color: var(--accent);
-  --border-color: #b2b2b2;
   --error-color: #dc3545;
   --success-color: #198754;
+  --outline-color: var(--accent);
 
   /* Typography */
   --font-family: "Roboto", Arial, Helvetica, sans-serif;
@@ -27,15 +23,9 @@
     --accent: #75c3ff;
     --body-color: #ffffff;
     --body-bg-color: #191c1e;
-    --btn-bg-color: #ffffff;
-    --btn-color: #191c1e;
-    --input-bg-color: #272a2d;
-    --outline-color: var(--accent);
-    --border-color: #858585;
     --error-color: #ea868f;
     --success-color: #75b798;
-
-    accent-color: var(--accent);
+    --outline-color: var(--accent);
   }
 }
 
