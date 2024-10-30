@@ -1,9 +1,13 @@
-# multiply-quiz
+# Multiply Quiz
 
 A simple quiz to test your multiplication skills.
 
 > [!NOTE]
 > This is a simple application I made for my kids to help them practice their multiplication skills. It's a simple quiz that asks you to multiply two numbers together.
+
+## Live demo
+
+👉 [Multiply Quiz](https://georapbox.github.io/multiply-quiz/)
 
 ## Development
 
