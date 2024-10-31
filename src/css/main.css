@@ -32,7 +32,6 @@
 .noscript {
   padding: 1rem 2rem;
   background-color: var(--error-color);
-  border-radius: var(--border-radius);
   color: var(--body-bg-color);
 }
 

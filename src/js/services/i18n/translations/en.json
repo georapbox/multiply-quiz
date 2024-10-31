@@ -1,0 +1,19 @@
+{
+  "loading": "Loading...",
+  "chooseQuizType": "Choose a quiz type",
+  "sequentialType": "Sequential",
+  "multipleChoiceType": "Multiple Choice",
+  "startQuizCTA": "Start Quiz",
+  "quitQuizCTA": "Quit Quiz",
+  "startOverCTA": "Start Over",
+  "quitQuizConfirm": "Quit the quiz? Your progress will be lost.",
+  "score": "Score",
+  "correctFeedback": "Correct!",
+  "incorrectFeedback": "Incorrect! The correct answer is {{correctAnswer}}.",
+  "completionMessage": "Congratulations! You've completed all questions.",
+  "completionMessageScore": "Your final score is {score}.",
+  "viewIncorrectAnswers": "View incorrect answers",
+  "question": "Question",
+  "yourAnswer": "Your Answer",
+  "correctAnswer": "Correct Answer"
+}
