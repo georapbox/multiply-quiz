@@ -1,4 +1,4 @@
-function e(e){return e&&e.__esModule?e.default:e}var t="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{},i={},o={},r=t.parcelRequireed01;null==r&&((r=function(e){if(e in i)return i[e].exports;if(e in o){var t=o[e];delete o[e];var r={id:e,exports:{}};return i[e]=r,t.call(r.exports,r,r.exports),r.exports}var s=Error("Cannot find module '"+e+"'");throw s.code="MODULE_NOT_FOUND",s}).register=function(e,t){o[e]=t},t.parcelRequireed01=r),(0,r.register)("kyEFX",function(e,t){Object.defineProperty(e.exports,"register",{get:function(){return i},set:function(e){return i=e},enumerable:!0,configurable:!0});var i,o=new Map;i=function(e,t){for(var i=0;i<t.length-1;i+=2)o.set(t[i],{baseUrl:e,path:t[i+1]})}}),r("kyEFX").register(new URL("",import.meta.url).toString(),JSON.parse('["7bk21","index.2062bc9e.js","dADNf","logo-light.50757842.png","9hXMK","logo-dark.33c21a11.png","ddvcB","celebration.228925ff.png"]'));const s="multiply-quiz",n=new class{constructor(e="session"){this.storage="local"===e?localStorage:sessionStorage}getItem(e){try{return JSON.parse(this.storage.getItem(`${s}/${e}`))}catch{return null}}setItem(e,t){try{this.storage.setItem(`${s}/${e}`,JSON.stringify(t))}catch{}}};var l={};l=new URL("logo-light.50757842.png",import.meta.url).toString();var a={};a=new URL("logo-dark.33c21a11.png",import.meta.url).toString();const c=`
+function e(e){return e&&e.__esModule?e.default:e}var t="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{},i={},o={},r=t.parcelRequireed01;null==r&&((r=function(e){if(e in i)return i[e].exports;if(e in o){var t=o[e];delete o[e];var r={id:e,exports:{}};return i[e]=r,t.call(r.exports,r,r.exports),r.exports}var s=Error("Cannot find module '"+e+"'");throw s.code="MODULE_NOT_FOUND",s}).register=function(e,t){o[e]=t},t.parcelRequireed01=r),(0,r.register)("kyEFX",function(e,t){Object.defineProperty(e.exports,"register",{get:function(){return i},set:function(e){return i=e},enumerable:!0,configurable:!0});var i,o=new Map;i=function(e,t){for(var i=0;i<t.length-1;i+=2)o.set(t[i],{baseUrl:e,path:t[i+1]})}}),r("kyEFX").register(new URL("",import.meta.url).toString(),JSON.parse('["7bk21","index.e963ed1b.js","dADNf","logo-light.50757842.png","9hXMK","logo-dark.33c21a11.png","ddvcB","celebration.228925ff.png"]'));const s="multiply-quiz",n=new class{constructor(e="session"){this.storage="local"===e?localStorage:sessionStorage}getItem(e){try{return JSON.parse(this.storage.getItem(`${s}/${e}`))}catch{return null}}setItem(e,t){try{this.storage.setItem(`${s}/${e}`,JSON.stringify(t))}catch{}}};var l={};l=new URL("logo-light.50757842.png",import.meta.url).toString();var a={};a=new URL("logo-dark.33c21a11.png",import.meta.url).toString();const c=`
   :host {
     display: grid;
     place-items: center;
@@ -146,6 +146,9 @@ function e(e){return e&&e.__esModule?e.default:e}var t="undefined"!=typeof globa
 
   form {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     gap: 0.5rem;
   }
 
@@ -164,6 +167,7 @@ function e(e){return e&&e.__esModule?e.default:e}var t="undefined"!=typeof globa
     font-weight: bold;
     color: inherit;
     text-align: center;
+    opacity: 1;
   }
 
   form > input.correct {
@@ -375,5 +379,5 @@ function e(e){return e&&e.__esModule?e.default:e}var t="undefined"!=typeof globa
 
         <button id="restartQuiz">Start Over</button>
       </div>
-    `,this.shadowRoot.querySelector("header").setAttribute("hidden",""),this.shadowRoot.querySelector("footer").setAttribute("hidden",""),this.#A();let t=this.shadowRoot.getElementById("restartQuiz");t?.addEventListener("click",this.#z,{once:!0})}#v(e){if(Object.prototype.hasOwnProperty.call(this,e)){let t=this[e];delete this[e],this[e]=t}}static defineCustomElement(e="multiply-quiz"){"undefined"==typeof window||window.customElements.get(e)||window.customElements.define(e,g)}}const w=document.querySelector("main");document.addEventListener("quiz-start",e=>{let t=document.querySelector("quiz-intro"),i=document.createElement("multiply-quiz"),o=e.detail.sequential,r=e.detail.multipleChoice;o&&i?.setAttribute("sequential",""),r&&i?.setAttribute("multiple-choice",""),w?.appendChild(i),t?.remove()}),document.addEventListener("quiz-restart",()=>{let e=document.querySelector("multiply-quiz"),t=document.createElement("quiz-intro");w?.appendChild(t),e?.remove()}),h.defineCustomElement(),g.defineCustomElement();
-//# sourceMappingURL=index.2062bc9e.js.map
+    `,this.shadowRoot.querySelector("header").setAttribute("hidden",""),this.shadowRoot.querySelector("footer").setAttribute("hidden",""),this.#A();let t=this.shadowRoot.getElementById("restartQuiz");t?.addEventListener("click",this.#z,{once:!0})}#v(e){if(Object.prototype.hasOwnProperty.call(this,e)){let t=this[e];delete this[e],this[e]=t}}static defineCustomElement(e="multiply-quiz"){"undefined"==typeof window||window.customElements.get(e)||window.customElements.define(e,g)}}const w=document.querySelector("main");document.addEventListener("quiz-start",e=>{let t=document.querySelector("quiz-intro"),i=document.createElement("multiply-quiz"),o=e.detail.sequential,r=e.detail.multipleChoice;o&&i?.setAttribute("sequential",""),r&&i?.setAttribute("multiple-choice",""),w?.appendChild(i),t?.remove()}),document.addEventListener("quiz-restart",()=>{let e=document.querySelector("multiply-quiz"),t=document.createElement("quiz-intro");w?.appendChild(t),e?.remove()}),window.visualViewport.addEventListener("resize",()=>{document.documentElement.style.height=`${window.visualViewport.height}px`}),h.defineCustomElement(),g.defineCustomElement();
+//# sourceMappingURL=index.e963ed1b.js.map
