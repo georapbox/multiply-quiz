@@ -23,5 +23,10 @@ document.addEventListener('quiz-restart', () => {
   quizEl?.remove();
 });
 
+window.visualViewport.addEventListener('resize', () => {
+  // Fix for iOS Safari visualViewport height change when virtual keyboard is shown.
+  document.documentElement.style.height = `${window.visualViewport.height}px`;
+});
+
 QuizIntro.defineCustomElement();
 MultiplyQuiz.defineCustomElement();

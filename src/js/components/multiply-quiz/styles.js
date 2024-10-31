@@ -66,6 +66,9 @@ export const styles = /* css */ `
 
   form {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     gap: 0.5rem;
   }
 
@@ -84,6 +87,7 @@ export const styles = /* css */ `
     font-weight: bold;
     color: inherit;
     text-align: center;
+    opacity: 1;
   }
 
   form > input.correct {
