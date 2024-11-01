@@ -1,7 +1,7 @@
 {
   "loading": "Loading...",
   "chooseQuizType": "Choose a quiz type",
-  "sequentialType": "Sequential",
+  "sequentialType": "In order (random by default)",
   "multipleChoiceType": "Multiple Choice",
   "startQuizCTA": "Start Quiz",
   "quitQuizCTA": "Quit Quiz",
@@ -9,7 +9,7 @@
   "quitQuizConfirm": "Quit the quiz? Your progress will be lost.",
   "score": "Score",
   "correctFeedback": "Correct!",
-  "incorrectFeedback": "Incorrect! The correct answer is {{correctAnswer}}.",
+  "incorrectFeedback": "Incorrect! The correct answer is {correctAnswer}.",
   "completionMessage": "Congratulations! You've completed all questions.",
   "completionMessageScore": "Your final score is {score}.",
   "viewIncorrectAnswers": "View incorrect answers",

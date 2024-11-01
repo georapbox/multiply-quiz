@@ -14,6 +14,11 @@ export const getLanguage = () => {
 };
 
 export const setLanguage = language => {
+  if (!languages[language]) {
+    console.warn(`Language "${language}" not supported.`);
+    return;
+  }
+
   storage.setItem('lang', language);
   document.documentElement.setAttribute('lang', language);
 };

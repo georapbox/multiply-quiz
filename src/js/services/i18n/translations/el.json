@@ -1,7 +1,7 @@
 {
   "loading": "Φόρτωση...",
   "chooseQuizType": "Επιλέξτε τύπο κουίζ",
-  "sequentialType": "Σειριακό",
+  "sequentialType": "Σε σειρά (τυχαίο από προεπιλογή)",
   "multipleChoiceType": "Πολλαπλής Επιλογής",
   "startQuizCTA": "Έναρξη Κουίζ",
   "quitQuizCTA": "Διακοπή Κουίζ",

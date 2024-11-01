@@ -9,8 +9,8 @@ const FEEDBACK_TIMEOUT_INCORRECT = 2000;
 const styles = /* css */ `
   :host {
     display: grid;
-    grid-template-areas: "header" "content" "footer";
-    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "header" "content";
+    grid-template-rows: auto 1fr;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -47,14 +47,6 @@ const styles = /* css */ `
     gap: 0.5rem;
     padding-block: 1rem;
     font-size: 1rem;
-  }
-
-  footer {
-    grid-area: footer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-block: 1rem;
   }
 
   button {
@@ -177,23 +169,22 @@ const styles = /* css */ `
 
   .multiple-choice > button.correct {
     background-color: var(--success-color);
-    border-color: color-mix(in srgb, var(--success-color) 40%, #ffffff);
+    border-color: color-mix(in srgb, var(--success-color) 70%, var(--body-color));
     color: var(--body-bg-color);
   }
 
   .multiple-choice > button.incorrect {
     background-color: var(--error-color);
-    border-color: color-mix(in srgb, var(--error-color) 40%, #ffffff);
+    border-color: color-mix(in srgb, var(--error-color) 70%, var(--body-color));
     color: var(--body-bg-color);
   }
 
   .quit-quiz-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: var(--error-color);
-    color: var(--body-bg-color);
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--error-color);
+    background-color: transparent;
+    color: var(--error-color);
+    font-size: 0.9rem;
   }
 
   .feedback-container {
@@ -253,6 +244,7 @@ const createTemplate = styles => {
     <header>
       <div id="score"></div>
       <progress id="progress"></progress>
+      <button type="button" id="quitQuiz" class="quit-quiz-btn">${t('quitQuizCTA')}</button>
     </header>
 
     <div id="quiz">
@@ -267,10 +259,6 @@ const createTemplate = styles => {
         <div id="feedback" class="feedback"></div>
       </div>
     </div>
-
-    <footer>
-      <button type="button" id="quitQuiz" class="quit-quiz-btn" aria-label="Quit quiz">${t('quitQuizCTA')}</button>
-    </footer>
   `;
 
   return template;
@@ -340,6 +328,7 @@ class MultiplyQuiz extends HTMLElement {
 
     if (this.multipleChoice) {
       this.#answerInput.setAttribute('disabled', '');
+      this.#answerInput.setAttribute('inert', '');
       this.#answerInput.setAttribute('type', 'text');
     } else {
       this.#answerInput.focus();
@@ -620,7 +609,6 @@ class MultiplyQuiz extends HTMLElement {
     `;
 
     this.shadowRoot.querySelector('header').setAttribute('hidden', '');
-    this.shadowRoot.querySelector('footer').setAttribute('hidden', '');
     this.#updateScore();
 
     const restartBtn = this.shadowRoot.getElementById('restartQuiz');

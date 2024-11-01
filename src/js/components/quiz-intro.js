@@ -60,7 +60,10 @@ const styles = /* css */ `
 
   form > div {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
   }
 `;
 
