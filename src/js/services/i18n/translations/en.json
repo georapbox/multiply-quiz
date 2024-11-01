@@ -11,7 +11,7 @@
   "correctFeedback": "Correct!",
   "incorrectFeedback": "Incorrect! The correct answer is {correctAnswer}.",
   "completionMessage": "Congratulations! You've completed all questions.",
-  "completionMessageScore": "Your final score is {score}.",
+  "completionMessageScore": "Your score is {score}.",
   "viewIncorrectAnswers": "View incorrect answers",
   "question": "Question",
   "yourAnswer": "Your Answer",

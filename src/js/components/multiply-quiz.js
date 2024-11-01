@@ -214,7 +214,7 @@ const styles = /* css */ `
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-    font-size: calc(1.425rem + 1vw);
+    font-size: calc(1.1rem + 1vw);
     text-align: center;
     text-wrap: balance;
   }

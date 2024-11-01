@@ -11,7 +11,7 @@
   "correctFeedback": "Σωστό!",
   "incorrectFeedback": "Λάθος! Η σωστή απάντηση είναι {correctAnswer}.",
   "completionMessage": "Συγχαρητήρια! Ολοκληρώσατε όλες τις ερωτήσεις.",
-  "completionMessageScore": "Το τελικό σας σκορ είναι {score}.",
+  "completionMessageScore": "Το σκορ σας είναι {score}.",
   "viewIncorrectAnswers": "Προβολή λανθασμένων απαντήσεων",
   "question": "Ερώτηση",
   "yourAnswer": "Η απάντησή σας",
