@@ -1,0 +1,19 @@
+{
+  "loading": "Φόρτωση...",
+  "chooseQuizType": "Επιλέξτε τύπο κουίζ",
+  "sequentialType": "Σε σειρά (τυχαίο από προεπιλογή)",
+  "multipleChoiceType": "Πολλαπλής Επιλογής",
+  "startQuizCTA": "Έναρξη Κουίζ",
+  "quitQuizCTA": "Διακοπή Κουίζ",
+  "startOverCTA": "Επανεκκίνηση",
+  "quitQuizConfirm": "Διακοπή του κουίζ; Η πρόοδός σας θα χαθεί.",
+  "score": "Σκορ",
+  "correctFeedback": "Σωστό!",
+  "incorrectFeedback": "Λάθος! Η σωστή απάντηση είναι {correctAnswer}.",
+  "completionMessage": "Συγχαρητήρια! Ολοκληρώσατε όλες τις ερωτήσεις.",
+  "completionMessageScore": "Το τελικό σας σκορ είναι {score}.",
+  "viewIncorrectAnswers": "Προβολή λανθασμένων απαντήσεων",
+  "question": "Ερώτηση",
+  "yourAnswer": "Η απάντησή σας",
+  "correctAnswer": "Σωστή απάντηση"
+}

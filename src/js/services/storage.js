@@ -1,7 +1,7 @@
 const STORAGE_PREFIX = 'multiply-quiz';
 
 export class Storage {
-  constructor(storageType = 'session') {
+  constructor(storageType = 'local') {
     this.storage = storageType === 'local' ? localStorage : sessionStorage;
   }
 
