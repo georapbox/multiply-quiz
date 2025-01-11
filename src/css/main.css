@@ -1,38 +1,28 @@
 :root {
   /* Colors */
-  --accent: #0d66fd;
-  --body-color: #191c1e;
-  --body-bg-color: #ffffff;
+  --accent: #f9b924;
+  --accent-light: #ffda83;
+  --body-color: #621818;
+  --body-bg-color: #fffff9;
   --error-color: #dc3545;
   --success-color: #198754;
   --outline-color: var(--accent);
+  --btn-bg-color: #ffda83;
+  --btn-border-color: var(--body-color);
 
   /* Typography */
   --font-family: "Roboto", Arial, Helvetica, sans-serif;
 
   /* Other */
-  --border-radius: 0.25rem;
+  --border-radius: 0.375rem;
 
-  color-scheme: light dark;
   accent-color: var(--accent);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Colors */
-    --accent: #75c3ff;
-    --body-color: #ffffff;
-    --body-bg-color: #191c1e;
-    --error-color: #ea868f;
-    --success-color: #75b798;
-    --outline-color: var(--accent);
-  }
 }
 
 .noscript {
   padding: 1rem 2rem;
   background-color: var(--error-color);
-  color: var(--body-bg-color);
+  color: #ffffff;
 }
 
 *,
@@ -58,9 +48,13 @@ html, body {
 body {
   font-family: var(--font-family);
   text-align: center;
-  background-color: var(--body-bg-color);
   color: var(--body-color);
   overflow-x: hidden;
+  background-color: var(--body-bg-color);
+  background-image:
+    linear-gradient(rgba(139, 0, 0, 0.075) 0.05rem, transparent 0.1rem),
+    linear-gradient(90deg, rgba(139, 0, 0, 0.075) 0.05rem, transparent 0.1rem);
+  background-size: 1.25rem 1.25rem;
 }
 
 main {

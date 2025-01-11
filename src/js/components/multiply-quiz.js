@@ -50,13 +50,14 @@ const styles = /* css */ `
   }
 
   button {
-    background-color: var(--body-color);
-    color: var(--body-bg-color);
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0.75rem 1.25rem;
+    background-color: var(--btn-bg-color);
+    color: var(--body-color);
+    border: 2px solid var(--btn-border-color);
+    border-radius: 50rem;
+    padding: 0.75rem 1.5rem;
     font-family: inherit;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
   }
 
@@ -65,11 +66,40 @@ const styles = /* css */ `
   }
 
   form {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    background-color: var(--body-bg-color);
+    padding: 2rem 1rem;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--body-color);
+  }
+
+  form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius);
+    background-color: var(--accent-light);
+    transform: translate(-0.5rem, -0.5rem) rotate(-5deg) scale(1.05);
+    z-index: -1;
+  }
+
+  form::after {
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    left: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: coral;
+    border-radius: 50%;
   }
 
   form > label {
@@ -81,7 +111,7 @@ const styles = /* css */ `
     max-width: 8rem;
     border: 2px solid var(--body-color);
     border-radius: var(--border-radius);
-    background-color: transparent;
+    background-color: #ffffff;
     font-family: inherit;
     font-size: 2.55rem;
     font-weight: bold;
@@ -157,11 +187,12 @@ const styles = /* css */ `
   }
 
   .multiple-choice > button {
+    position: relative;
     min-width: 4rem;
     padding: 0.5rem 2rem;
     border-radius: 50rem;
     border: 2px solid var(--body-color);
-    background-color: transparent;
+    background-color: var(--btn-bg-color);
     color: var(--body-color);
     font-family: inherit;
     font-size: 1.2rem;
@@ -181,9 +212,9 @@ const styles = /* css */ `
 
   .quit-quiz-btn {
     padding: 0.25rem 0.75rem;
-    border: 1px solid var(--error-color);
-    background-color: transparent;
-    color: var(--error-color);
+    border: 1px solid var(--btn-border-color);
+    background-color: var(--btn-bg-color);
+    color: var(--body-color);
     font-size: 0.9rem;
   }
 
@@ -507,7 +538,7 @@ class MultiplyQuiz extends HTMLElement {
       if (userAnswer === correctAnswer) {
         this.#feedbackEl.innerHTML = /* html */ `
           <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" fill="var(--success-color)" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
           </svg> ${t('correctFeedback')}
         `;
 

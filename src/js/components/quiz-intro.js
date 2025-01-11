@@ -1,5 +1,4 @@
-import logoLightIcon from '../../assets/logo-light.png';
-import logoDarkIcon from '../../assets/logo-dark.png';
+import logo from '../../assets/logo.png';
 import { storage } from '../services/storage.js';
 import { t } from '../services/i18n/i18n.js';
 
@@ -34,19 +33,27 @@ const styles = /* css */ `
   }
 
   button {
-    background-color: var(--body-color);
-    color: var(--body-bg-color);
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0.75rem 1.25rem;
+    background-color: var(--btn-bg-color);
+    color: var(--body-color);
+    border: 2px solid var(--btn-border-color);
+    border-radius: 50rem;
+    padding: 0.75rem 1.5rem;
     font-family: inherit;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
+  }
+
+  .logo {
+    border-radius: 50%;
+    border: 3px solid var(--body-color);
   }
 
   h1 {
     margin: 0;
-    font-size: calc(1.425rem + 1.4vw);
+    font-size: calc(1.425rem + 2vw);
+    color: var(--accent);
+    text-shadow: 0.0625rem 0.0625rem 0.0625rem var(--body-color);
   }
 
   form {
@@ -76,11 +83,7 @@ const createTemplate = styles => {
     <language-select></language-select>
 
     <form>
-      <picture>
-        <source srcset="${logoLightIcon}" media="(prefers-color-scheme: dark)">
-        <source srcset="${logoDarkIcon}" media="(prefers-color-scheme: light)">
-        <img src="${logoDarkIcon}" alt="Quiz" width="120" height="120" aria-hidden="true">
-      </picture>
+      <img src="${logo}" class="logo" alt="Quiz" width="120" height="120" aria-hidden="true">
 
       <h1>${t('chooseQuizType')}</h1>
 
