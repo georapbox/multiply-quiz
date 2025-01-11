@@ -9,6 +9,13 @@ A simple quiz to test your multiplication skills.
 
 👉 [Multiply Quiz](https://georapbox.github.io/multiply-quiz/)
 
+## Screenshots
+
+The following screenshots show the application in action:
+
+![Screenshot 1](screenshots/screenshot-1.png)
+![Screenshot 2](screenshots/screenshot-2.png)
+
 ## Development
 
 Below are the instructions for setting up the development environment.
