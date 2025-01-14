@@ -1,4 +1,4 @@
-import celebrationIcon from '../../assets/celebration.png';
+import starIcon from '../../assets/star-icon.svg';
 import { t } from '../services/i18n/i18n.js';
 import { shuffle } from '../utils/shuffle.js';
 
@@ -147,11 +147,13 @@ const styles = /* css */ `
   table {
     width: 100%;
     border-collapse: collapse;
+    border: 1px solid var(--body-color);
+    background-color: var(--body-bg-color);
   }
 
   thead th {
     padding: 0.5rem 1rem;
-    border-block-end: 2px solid var(--body-color);
+    border-block-end: 1px solid var(--body-color);
     font-size: 0.9rem;
     font-weight: bold;
   }
@@ -239,20 +241,67 @@ const styles = /* css */ `
     display: none !important;
   }
 
+  .score-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: tomato;
+  }
+
   .completion-message {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-    font-size: calc(1.1rem + 1vw);
+    font-size: 1.25rem;
     text-align: center;
     text-wrap: balance;
   }
 
-  .completion-message img {
-    border-radius: 50%;
-    border: 5px solid var(--body-color);
+  .completion-message .star {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.75rem;
+  }
+
+  .completion-message .score {
+    font-size: 5rem;
+    font-weight: 500;
+    color: tomato;
+  }
+
+  progress {
+    --stripe-light: var(--accent);
+    --stripe-dark: color-mix(in srgb, var(--accent) 85%, var(--body-color));
+    --prgress-stripe: repeating-linear-gradient(45deg, var(--stripe-light), var(--stripe-light) 10px, var(--stripe-dark) 10px, var(--stripe-dark) 20px);
+
+    appearance: none;
+    -webkit-appearance: none;
+    width: 13rem;
+    height: 1rem;
+    border: 2px solid var(--body-color);
+    border-radius: 50rem;
+    background-color: var(--body-bg-color);
+    overflow: hidden;
+  }
+
+  progress::-webkit-progress-bar {
+    background-color: var(--body-bg-color);
+    border-radius: 50rem;
+  }
+
+  progress::-webkit-progress-value {
+    background: var(--accent);
+    background: var(--prgress-stripe);
+  }
+
+  progress::-moz-progress-bar {
+    background: var(--accent);
+    background: var(--prgress-stripe);
   }
 
   @media (min-width: 1024px) {
@@ -273,7 +322,10 @@ const createTemplate = styles => {
     <style>${styles}</style>
 
     <header>
-      <div id="score"></div>
+      <div class="score-container">
+        <img src="${starIcon}" alt="Score" width="35" height="35">
+        <span id="score"></span>
+      </div>
       <progress id="progress"></progress>
       <button type="button" id="quitQuiz" class="quit-quiz-btn">${t('quitQuizCTA')}</button>
     </header>
@@ -583,8 +635,7 @@ class MultiplyQuiz extends HTMLElement {
   }
 
   #updateScore() {
-    const correctRate = ((this.#correctAnswers / this.#shownQuestionsCount) * 100 || 0).toFixed(0);
-    this.#scoreEl.textContent = `${t('score')}: ${this.#correctAnswers} / ${this.#shownQuestionsCount} (${correctRate}%)`;
+    this.#scoreEl.textContent = this.#correctAnswers;
   }
 
   #updateProgress() {
@@ -595,16 +646,19 @@ class MultiplyQuiz extends HTMLElement {
   #showCompletionMessage() {
     this.shadowRoot.getElementById('quiz').innerHTML = /* html */ `
       <div class="completion-message">
-        <img src="${celebrationIcon}" alt="Celebration" width="125" height="121" aria-hidden="true">
-        ${t('completionMessage')}
-        <br>
-        ${t('completionMessageScore', {
-          score: `${this.#correctAnswers} / ${this.#totalQuestions}`
-        })}
+        <div class="star">
+          <img src="${starIcon}" alt="Score" width="50" height="50" aria-hidden="true">
+          ${t('score')}
+        </div>
+
+        <div class="score">
+          ${this.#correctAnswers}
+        </div>
 
         ${
           this.#wrongAnswers.size > 0
             ? /* html */ `
+              ${t('notAllCorrectMessage')}
               <details>
                 <summary>${t('viewIncorrectAnswers')}</summary>
 
@@ -632,7 +686,7 @@ class MultiplyQuiz extends HTMLElement {
                 </table>
               </details>
             `
-            : ''
+            : `🎉 ${t('allCorrectMessage')}`
         }
 
         <button id="restartQuiz">${t('startOverCTA')}</button>
