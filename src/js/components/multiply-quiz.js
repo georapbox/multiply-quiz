@@ -3,8 +3,8 @@ import { t } from '../services/i18n/i18n.js';
 import { shuffle } from '../utils/shuffle.js';
 
 const NUM_OF_MULTIPLE_CHOICES = 3;
-const FEEDBACK_TIMEOUT = 1000;
-const FEEDBACK_TIMEOUT_INCORRECT = 2000;
+const FEEDBACK_TIMEOUT = 750;
+const FEEDBACK_TIMEOUT_INCORRECT = 1000;
 
 const styles = /* css */ `
   :host {
@@ -520,13 +520,25 @@ class MultiplyQuiz extends HTMLElement {
         this.#updateMultipleChoice(question.answerChoices);
       }
     } else {
-      this.#showCompletionMessage();
+      if (!document.startViewTransition) {
+        this.#showCompletionMessage();
+      } else {
+        document.startViewTransition(() => {
+          this.#showCompletionMessage();
+        });
+      }
     }
   }
 
   #nextRandomQuestion() {
     if (this.#usedQuestions.size === this.#totalQuestions) {
-      this.#showCompletionMessage();
+      if (!document.startViewTransition) {
+        this.#showCompletionMessage();
+      } else {
+        document.startViewTransition(() => {
+          this.#showCompletionMessage();
+        });
+      }
       return;
     }
 

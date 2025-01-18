@@ -25,8 +25,16 @@ function handleQuizStart(evt) {
 
   sequential && quizEl?.setAttribute('sequential', '');
   multipleChoice && quizEl?.setAttribute('multiple-choice', '');
-  mainEl?.appendChild(quizEl);
-  quizIntroEl?.remove();
+
+  if (!document.startViewTransition) {
+    quizIntroEl?.remove();
+    mainEl?.appendChild(quizEl);
+  } else {
+    document.startViewTransition(() => {
+      quizIntroEl?.remove();
+      mainEl?.appendChild(quizEl);
+    });
+  }
 }
 
 function handleQuizRestart() {
@@ -36,8 +44,15 @@ function handleQuizRestart() {
     return;
   }
 
-  quizEl?.remove();
-  mainEl?.appendChild(document.createElement('quiz-intro'));
+  if (!document.startViewTransition) {
+    quizEl?.remove();
+    mainEl?.appendChild(document.createElement('quiz-intro'));
+  } else {
+    document.startViewTransition(() => {
+      quizEl?.remove();
+      mainEl?.appendChild(document.createElement('quiz-intro'));
+    });
+  }
 }
 
 function handleLanguageChange(evt) {
