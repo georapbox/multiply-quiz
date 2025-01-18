@@ -72,10 +72,11 @@ const styles = /* css */ `
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    background-color: var(--body-bg-color);
+    min-width: 19rem;
     padding: 2rem 1rem;
     border-radius: var(--border-radius);
     border: 2px solid var(--body-color);
+    background-color: var(--body-bg-color);
   }
 
   form::before {
@@ -103,21 +104,27 @@ const styles = /* css */ `
   }
 
   form > label {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: bold;
   }
 
   form > input {
-    max-width: 8rem;
+    max-width: 7.25rem;
     border: 2px solid var(--body-color);
     border-radius: var(--border-radius);
     background-color: #ffffff;
     font-family: inherit;
-    font-size: 2.55rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: inherit;
     text-align: center;
     opacity: 1;
+    -webkit-appearance: textfield;
+  }
+
+  form > input::-webkit-outer-spin-button,
+  form > input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
   }
 
   form > input.correct {
@@ -250,6 +257,11 @@ const styles = /* css */ `
     color: tomato;
   }
 
+  .score-container > img {
+    width: 2.1875rem;
+    height: 2.1875rem;
+  }
+
   .completion-message {
     display: flex;
     flex-direction: column;
@@ -266,6 +278,11 @@ const styles = /* css */ `
     align-items: center;
     gap: 0.5rem;
     font-size: 1.75rem;
+  }
+
+  .completion-message .star > img {
+    width: 3.125rem;
+    height: 3.125rem;
   }
 
   .completion-message .score {
@@ -310,7 +327,7 @@ const styles = /* css */ `
     }
 
     form > input {
-      font-size: 3.55rem;
+      font-size: 4rem;
     }
   }
 `;
